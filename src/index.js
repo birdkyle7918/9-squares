@@ -124,22 +124,32 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        const stepNumber = this.state.stepNumber;
 
         // 把历史步骤映射为代表按钮的 React 元素，然后可以展示出一个按钮的列表，点击这些按钮，可以“跳转”到对应的历史步骤
         const moves = history.map((step, move) => {
 
             // 每一次落子的横纵坐标以及落子角色（叉叉或圆圈）
-            const oneMoveHorizon = history[move].horizon;
-            const oneMoveVertical = history[move].vertical;
+            const oneMoveHorizon = step.horizon;
+            const oneMoveVertical = step.vertical;
 
             const buttonDescribe = move ?
-                'Go to move ' + move + ' (' + oneMoveHorizon + ',' + oneMoveVertical + ') '
-                : 'Go to game start';
+                '第' + move + '步' + ' (' + oneMoveHorizon + ',' + oneMoveVertical + ') '
+                : '回到初始棋盘';
+
+            // 当前步数，按钮的样式为红底
+            const currentMoveStyle = {backgroundColor: '#ff0000'};
+
+            // 其他按钮的样式
+            const otherMoveStyle = {};
 
             // 返回一个 button 列表，可以回到任意一个历史时刻
             return (
-              <li key={move}>
-                  <button onClick={() => this.jumpTo(move)}>{buttonDescribe}</button>
+              <li key={move} >
+                  <button onClick={() => this.jumpTo(move)}
+                          style={move === stepNumber ? currentMoveStyle : otherMoveStyle}>
+                      {buttonDescribe}
+                  </button>
               </li>
             );
         })
